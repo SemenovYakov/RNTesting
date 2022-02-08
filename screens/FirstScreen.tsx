@@ -17,6 +17,7 @@ export type Props = {
 
 export const FirstScreen = ({navigation}: Props) => {
   const [tapDisable, setTapDisabled] = useState(false);
+  const [state, setState] = useState('');
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -25,9 +26,11 @@ export const FirstScreen = ({navigation}: Props) => {
       }}>
       <SafeAreaView style={styles.mainContainer}>
         <Text style={styles.mainTitle}>First Page</Text>
+        <Text style={styles.mainTitle}>{state}</Text>
         <TextInput
           style={styles.mainInput}
           onFocus={() => setTapDisabled(true)}
+          onChangeText={text => setState(text)}
         />
         <TouchableOpacity
           disabled={tapDisable}

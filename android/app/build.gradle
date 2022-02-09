@@ -126,6 +126,8 @@ def enableHermes = project.ext.react.get("enableHermes", false);
 def nativeArchitectures = project.getProperties().get("reactNativeDebugArchitectures")
 
 android {
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -135,8 +137,10 @@ android {
         applicationId "com.testrn"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
     }
     splits {
         abi {
@@ -217,6 +221,7 @@ dependencies {
         implementation jscFlavor
     }
 }
+
 
 // Run this once to be able to run the application with BUCK
 // puts all compile dependencies into folder libs for BUCK to use

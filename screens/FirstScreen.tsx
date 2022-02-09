@@ -1,7 +1,9 @@
 import {ParamListBase} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
+import ImagePicker from 'react-native-image-crop-picker';
 import {
+  ImageBackground,
   Keyboard,
   SafeAreaView,
   StyleSheet,
@@ -16,8 +18,27 @@ export type Props = {
 };
 
 export const FirstScreen = ({navigation}: Props) => {
+  const [image, setImage] = useState('');
+
+
+  const takePhotoFromLibrary = () => {
+    ImagePicker.openPicker({}).then(item => {
+      setImage(item.path);
+    });
+  };
+
+
+  const takePhotoFromCamera = () => {
+    ImagePicker.openCamera({
+      cropping: false,
+    }).then(item => {
+      setImage(item.path);
+    });
+  };
+
+
   const [tapDisable, setTapDisabled] = useState(false);
-  const [state, setState] = useState('');
+  const [text, setText] = useState('');
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -26,11 +47,11 @@ export const FirstScreen = ({navigation}: Props) => {
       }}>
       <SafeAreaView style={styles.mainContainer}>
         <Text style={styles.mainTitle}>First Page</Text>
-        <Text style={styles.mainTitle}>{state}</Text>
+        <Text style={styles.mainTitle}>{text}</Text>
         <TextInput
           style={styles.mainInput}
           onFocus={() => setTapDisabled(true)}
-          onChangeText={text => setState(text)}
+          onChangeText={item => setText(item)}
         />
         <TouchableOpacity
           disabled={tapDisable}
@@ -50,11 +71,33 @@ export const FirstScreen = ({navigation}: Props) => {
           onPress={() => navigation.navigate('Map')}>
           <Text style={styles.textButton}>Map</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          onPress={takePhotoFromCamera}
+          style={styles.imageContainer}>
+          <ImageBackground
+            source={{
+              uri: image,
+            }}
+            style={{width: 200, height: 200}}
+            imageStyle={{borderRadius: 50}}
+          />
+        </TouchableOpacity>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
 };
 const styles = StyleSheet.create({
+  imageContainer: {
+    margin: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 5,
+    width: 200,
+    height: 200,
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: 'white',
+  },
   mainContainer: {
     backgroundColor: 'black',
     flex: 1,
@@ -85,5 +128,6 @@ const styles = StyleSheet.create({
   textButton: {
     fontFamily: 'Verdana',
     fontSize: 20,
+    color: 'black',
   },
 });

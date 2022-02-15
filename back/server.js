@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const authRouter = require('./back/authRouter');
+const authRouter = require('./authRouter');
 const PORT = process.env.PORT || 3000;
 const mongoURI =
   'mongodb+srv://YakovAdmin:12345@db.6j3pu.mongodb.net/mongoDB?retryWrites=true&w=majority';

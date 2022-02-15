@@ -3,9 +3,9 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import {useCamera} from 'react-native-camera-hooks';
 import RNFS from 'react-native-fs';
-import {Props} from './FirstScreen';
+import {Navigation} from '../components/interfaces';
 
-export const CameraPage = ({navigation}: Props) => {
+export const CameraPage = ({navigation}: Navigation) => {
   const [{cameraRef}, {takePicture}] = useCamera();
 
   const [cameraType, setCameraType] = useState('back');

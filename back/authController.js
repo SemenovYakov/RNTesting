@@ -11,23 +11,27 @@ const generateAccessToken = id => {
 let controller = {
   registration: async (req, res) => {
     try {
-      const {name, surname, age, email, password, image} = req.body;
-      const candidate = await User.findOne({email});
-      if (candidate) {
-        res.status(400).send({message: 'This email is already in use'});
+      const {username, age, email, password, image} = req.body;
+      const emailcheck = await User.findOne({email});
+      const usernamecheck = await User.findOne({username});
+      if (emailcheck) {
+        return res.send({message: 'This email is already in use'});
+      } else if (usernamecheck) {
+        return res.send({message: 'This username is already in use'});
+      } else {
+        const hashPassword = bcrypt.hashSync(password, 5);
+        const user = new User({
+          username,
+          age,
+          email,
+          password: hashPassword,
+          image,
+        });
+        await user.save();
+        return res.status(200).send({message: 'registration success'});
       }
-      const hashPassword = bcrypt.hashSync(password, 5);
-      const user = new User({
-        name,
-        surname,
-        age,
-        email,
-        password: hashPassword,
-        image,
-      });
-      await user.save();
     } catch (error) {
-      res.status(400).send({message: `registration error: ${error}`});
+      return res.status(400).send({message: `registration error: ${error}`});
     }
   },
 
@@ -36,24 +40,26 @@ let controller = {
       const {email, password} = req.body;
       const user = await User.findOne({email});
       if (!user) {
-        res.status(400).send({message: 'User undefined'});
+        return res.status(400).send({message: 'User undefined'});
+      } else {
+        const validPassword = bcrypt.compareSync(password, user.password);
+        if (!validPassword) {
+          return res.status(400).send({message: 'Password error'});
+        } else {
+          const token = generateAccessToken(user._id);
+          return res.send(token);
+        }
       }
-      const validPassword = bcrypt.compareSync(password, user.password);
-      if (!validPassword) {
-        res.status(400).send({message: 'Password error'});
-      }
-      const token = generateAccessToken(user._id);
-      res.send(token);
     } catch (error) {
-      res.status(400).json({message: `${error}`});
+      return res.status(400).json({message: `${error}`});
     }
   },
   users: async (req, res) => {
     try {
       const users = await User.find();
-      res.send(users);
+      res.status(200).send(users);
     } catch (error) {
-      res.send({message: 'No users'});
+      return res.status(400).send({message: 'Database error'});
     }
   },
 };

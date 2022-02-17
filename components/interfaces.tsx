@@ -9,3 +9,10 @@ export interface ModalInterface {
 export type Navigation = {
   navigation: NativeStackNavigationProp<ParamListBase>;
 };
+export interface IUser {
+  username: string;
+  age: string;
+  email: string;
+  password: string;
+  image: string;
+}

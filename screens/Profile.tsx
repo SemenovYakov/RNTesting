@@ -1,20 +1,41 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ImageBackground,
   SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
 import {ModalComponent} from '../components/modal';
 
 export const Profile = () => {
-  const [image, setImage] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  // const [image, setImage] = useState('');
+  // const [showModal, setShowModal] = useState(false);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const getUsers = async () => {
+      const res = await fetch('http://192.168.1.138:3000/auth/users');
+      const data = await res.json();
+      return data;
+    };
+    getUsers()
+      .then(result => {
+        setUsers(result);
+      })
+      .catch(e => console.log(e));
+  });
+
+  //console.log(users);
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <Text style={styles.mainTitle}>Profile</Text>
-      <TouchableOpacity
+      {users.map(item => (
+        <Text style={{color:'red'}}>{item.age}</Text>
+      ))}
+      {/* <TouchableOpacity
         style={styles.imageContainer}
         onPress={() => setShowModal(true)}>
         <ImageBackground
@@ -29,7 +50,7 @@ export const Profile = () => {
           setImage={setImage}
           setShowModal={setShowModal}
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </SafeAreaView>
   );
 };

@@ -1,14 +1,20 @@
 import Modal from 'react-native-modal';
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {StyledButton} from './button';
 
-export const RegModalComponent = (showModal, setShowModal) => {
+import {StackActions, useNavigation} from '@react-navigation/native';
+import {StyledButton} from '../button';
+
+export const RegModalComponent = ({message, showModal}) => {
+  const navigation = useNavigation();
+  const RoutRegModal = () => {
+    navigation.dispatch(StackActions.replace('Sign in'));
+  };
   return (
     <Modal isVisible={showModal} style={styles.modal}>
       <View style={styles.modalWindow}>
-        <Text style={styles.modalText}>Registration success!!!</Text>
-        <StyledButton buttonText={'OK'} func={setShowModal} />
+        <Text style={styles.modalText}>message</Text>
+        <StyledButton buttonText={'OK'} func={RoutRegModal} />
       </View>
     </Modal>
   );

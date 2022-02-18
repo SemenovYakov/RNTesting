@@ -4,16 +4,15 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableWithoutFeedback,
-  View,
 } from 'react-native';
 
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import {StyledButton} from '../components/button';
-import {Submit} from '../components/RegistrationRequest';
-import {RegModalComponent} from '../components/regModal';
+
+import {Registrate} from '../components/Registration/RegRequest';
+import {RegModalComponent} from '../components/Registration/regModal';
+import {RegistrationForm} from '../components/Registration/RegForm';
 const RegSchema = yup.object({
   username: yup.string().required(),
   age: yup.number().required().positive().integer(),
@@ -23,10 +22,10 @@ const RegSchema = yup.object({
 });
 
 export const Registration = () => {
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <ScrollView contentContainerStyle={{alignItems: 'center'}}>
+      <ScrollView contentContainerStyle={styles.body}>
         <Text style={styles.registrationTitle}>Registration</Text>
         <Formik
           validationSchema={RegSchema}
@@ -38,86 +37,22 @@ export const Registration = () => {
             image: '',
           }}
           onSubmit={async values => {
-            try {
-              await Submit(values);
-            } catch (error) {
-              console.log(error);
-            }
+            await Registrate(values);
+            await setShowModal(true);
           }}>
-          {({values, handleChange, handleSubmit, errors}) => (
-            <View style={{width: '100%', alignItems: 'center'}}>
-              <View style={styles.field}>
-                <Text style={styles.registrationFieldsTitle}>Username</Text>
-                <TextInput
-                  style={styles.registrationInput}
-                  onChangeText={handleChange('username')}
-                  value={values.username}
-                />
-                <Text style={styles.errorText}>{errors.username}</Text>
-              </View>
-              <View style={styles.field}>
-                <Text style={styles.registrationFieldsTitle}>Age</Text>
-                <TextInput
-                  style={styles.registrationInput}
-                  onChangeText={handleChange('age')}
-                  value={values.age}
-                  keyboardType="numeric"
-                />
-                <Text style={styles.errorText}>{errors.age}</Text>
-              </View>
-              <View style={styles.field}>
-                <Text style={styles.registrationFieldsTitle}>Email</Text>
-                <TextInput
-                  style={styles.registrationInput}
-                  onChangeText={handleChange('email')}
-                  value={values.email}
-                />
-                <Text style={styles.errorText}>{errors.email}</Text>
-              </View>
-              <View style={styles.field}>
-                <Text style={styles.registrationFieldsTitle}>Password</Text>
-                <TextInput
-                  style={styles.registrationInput}
-                  onChangeText={handleChange('password')}
-                  value={values.password}
-                />
-                <Text style={styles.errorText}>{errors.password}</Text>
-              </View>
-              <StyledButton buttonText={'Create'} func={handleSubmit} />
-            </View>
-          )}
+          {props => <RegistrationForm formikprops={props} />}
         </Formik>
-        <RegModalComponent showModal={showModal} setShowModal={setShowModal} />
+        <RegModalComponent showModal={showModal} message={'message'} />
       </ScrollView>
     </TouchableWithoutFeedback>
   );
 };
 const styles = StyleSheet.create({
-  errorText: {
-    color: 'red',
-    fontFamily: 'Verdana',
-    fontSize: 12,
-    lineHeight: 12,
-  },
   body: {alignItems: 'center'},
-  field: {width: '70%'},
-  registrationInput: {
-    color: 'black',
-    backgroundColor: 'lightgray',
-    width: '100%',
-    height: 40,
-    borderRadius: 10,
-  },
-
   registrationTitle: {
     color: 'black',
     fontFamily: 'Verdana',
     fontSize: 30,
     margin: 10,
-  },
-  registrationFieldsTitle: {
-    color: 'black',
-    fontFamily: 'Verdana',
-    fontSize: 16,
   },
 });

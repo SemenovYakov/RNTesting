@@ -1,7 +1,8 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {ButtonProps} from './interfaces';
 
-export const StyledButton = ({buttonText, func}) => {
+export const StyledButton = ({buttonText, func}: ButtonProps) => {
   return (
     <TouchableOpacity style={styles.registrationButton} onPress={func}>
       <Text style={styles.textButton}>{buttonText}</Text>

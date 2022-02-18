@@ -12,8 +12,13 @@ export const HomePage = ({navigation}: Navigation) => {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.homeButton}
-        onPress={() => navigation.navigate('Registration')}>
-        <Text style={styles.textButton}>Registration</Text>
+        onPress={() => navigation.navigate('Sign in')}>
+        <Text style={styles.textButton}>Sign in</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.homeButton}
+        onPress={() => navigation.navigate('Sign up')}>
+        <Text style={styles.textButton}>Sign up</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.homeButton}

@@ -15,9 +15,9 @@ let controller = {
       const emailcheck = await User.findOne({email});
       const usernamecheck = await User.findOne({username});
       if (emailcheck) {
-        return res.send({message: 'This email is already in use'});
+        return res.json({message: 'This email is already in use'});
       } else if (usernamecheck) {
-        return res.send({message: 'This username is already in use'});
+        return res.json({message: 'This username is already in use'});
       } else {
         const hashPassword = bcrypt.hashSync(password, 5);
         const user = new User({
@@ -28,10 +28,10 @@ let controller = {
           image,
         });
         await user.save();
-        return res.status(200).send({message: 'registration success'});
+        return res.status(200).json({message: 'registration success'});
       }
     } catch (error) {
-      return res.status(400).send({message: `registration error: ${error}`});
+      return res.status(400).json({message: `registration error: ${error}`});
     }
   },
 
@@ -40,37 +40,37 @@ let controller = {
       const {email, password} = req.body;
       const user = await User.findOne({email});
       if (!user) {
-        return res.status(400).send({message: 'User undefined'});
-      } else {
-        const validPassword = bcrypt.compareSync(password, user.password);
-        if (!validPassword) {
-          return res.status(400).send({message: 'Password error'});
-        } else {
-          const token = generateAccessToken(user._id);
-          return res.send(token);
-        }
+        return res.status(400).json({message: 'User undefined'});
       }
+      const validPassword = bcrypt.compareSync(password, user.password);
+      if (!validPassword) {
+        return res.status(400).json({message: 'Password error'});
+      }
+      const token = generateAccessToken(user._id);
+      return res.json({token: token});
     } catch (error) {
       return res.status(400).json({message: `${error}`});
     }
   },
-  users: async (req, res) => {
+  auth: async (req, res) => {
     try {
-      const users = await User.find();
-      res.status(200).send(users);
+      const user = await User.findOne({_id: req.user});
+      console.log('req', req);
+      console.log('auth', user);
+      const token = generateAccessToken(user._id);
+      return res.json({
+        token,
+        user: {
+          username: user.username,
+          age: user.age,
+          email: user.email,
+          image: user.image,
+        },
+      });
     } catch (error) {
-      return res.status(400).send({message: 'Database error'});
+      return res.status(400).json({message: `${error}`});
     }
   },
 };
 
 module.exports = controller;
-
-// {
-//     "name":"user1",
-//     "surname":"user1",
-//     "email":"user1",
-//     "age":1,
-//     "password":"user1",
-//     "image":"user1"
-// }

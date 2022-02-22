@@ -13,7 +13,7 @@ export interface IUser {
   username: string;
   age: string;
   email: string;
-  password: string;
+  password?: string;
   image: string;
 }
 export interface ILogin {

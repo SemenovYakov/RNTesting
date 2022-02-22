@@ -15,9 +15,14 @@ const LogSchema = yup.object({
   password: yup.string().required(),
 });
 import {LoginForm} from '../components/Authorization/LogForm';
-import {Authorization} from '../components/Authorization/LogRequest';
+import {Login} from '../components/Authorization/LogRequest';
+import {useAppDispatch, useAppSelector} from '../redux/store/hooks';
+import {StackActions, useNavigation} from '@react-navigation/native';
 
-export const Login = () => {
+export const LoginScreen = () => {
+  const {isAuth} = useAppSelector(state => state.userReducer);
+  const navigation = useNavigation();
+  const dispatch = useAppDispatch();
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <SafeAreaView style={styles.body}>
@@ -28,11 +33,12 @@ export const Login = () => {
             email: '',
             password: '',
           }}
-          onSubmit={values => {
-            Authorization(values);
-          }}>
+          onSubmit={values => dispatch(Login(values))}>
           {props => <LoginForm formikprops={props} />}
         </Formik>
+        {isAuth
+          ? navigation.dispatch(StackActions.replace('Profile'))
+          : console.log()}
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );

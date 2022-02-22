@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ImageBackground,
   SafeAreaView,
@@ -6,15 +6,29 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import {ModalComponent} from '../components/ImageModal';
 
+import {StyledButton} from '../components/button';
+import {ModalComponent} from '../components/ImageModal';
+import {useAppDispatch, useAppSelector} from '../redux/store/hooks';
+import {LogOutUser} from '../redux/reducers/userReducer';
 export const Profile = () => {
   const [image, setImage] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const dispatch = useAppDispatch();
+  const {currentUser} = useAppSelector(state => state.userReducer);
 
   return (
     <SafeAreaView style={styles.mainContainer}>
       <Text style={styles.mainTitle}>Profile</Text>
+      <Text style={styles.mainTitle}>{currentUser.username}</Text>
+      <Text style={styles.mainTitle}>{currentUser.age}</Text>
+      <Text style={styles.mainTitle}>{currentUser.email}</Text>
+      <StyledButton
+        buttonText={'Log out'}
+        func={() => {
+          dispatch(LogOutUser());
+        }}
+      />
       <TouchableOpacity
         style={styles.imageContainer}
         onPress={() => setShowModal(true)}>

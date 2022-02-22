@@ -20,16 +20,6 @@ export const HomePage = ({navigation}: Navigation) => {
         onPress={() => navigation.navigate('Sign up')}>
         <Text style={styles.textButton}>Sign up</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.homeButton}
-        onPress={() => navigation.navigate('Map')}>
-        <Text style={styles.textButton}>Map</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.homeButton}
-        onPress={() => navigation.navigate('Camera')}>
-        <Text style={styles.textButton}>Camera</Text>
-      </TouchableOpacity>
     </SafeAreaView>
   );
 };

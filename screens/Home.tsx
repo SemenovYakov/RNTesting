@@ -15,11 +15,7 @@ export const HomePage = ({navigation}: Navigation) => {
         onPress={() => navigation.navigate('Sign in')}>
         <Text style={styles.textButton}>Sign in</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.homeButton}
-        onPress={() => navigation.navigate('Sign up')}>
-        <Text style={styles.textButton}>Sign up</Text>
-      </TouchableOpacity>
+   
     </SafeAreaView>
   );
 };
